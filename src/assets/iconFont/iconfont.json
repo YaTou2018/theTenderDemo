@@ -1,0 +1,191 @@
+{
+  "id": "1921458",
+  "name": "审读系统1.0",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "2510585",
+      "name": "刷新",
+      "font_class": "shuaxin",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "4233209",
+      "name": "刷新",
+      "font_class": "shuaxin1",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "14276732",
+      "name": "下载",
+      "font_class": "huabanbeifen",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "2189724",
+      "name": "邮箱",
+      "font_class": "youxiang",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "3557347",
+      "name": "用户",
+      "font_class": "yonghu",
+      "unicode": "e6ef",
+      "unicode_decimal": 59119
+    },
+    {
+      "icon_id": "5600528",
+      "name": "账户密码",
+      "font_class": "zhanghumima",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
+      "icon_id": "10717046",
+      "name": "邮箱",
+      "font_class": "youxiang1",
+      "unicode": "e756",
+      "unicode_decimal": 59222
+    },
+    {
+      "icon_id": "12650203",
+      "name": "电 话",
+      "font_class": "dianhua",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "13867260",
+      "name": "钥匙",
+      "font_class": "yuechi",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "16202610",
+      "name": "电  话 (1)",
+      "font_class": "dianhua1",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "11943503",
+      "name": "账号管理",
+      "font_class": "zhanghaoguanli",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "4008357",
+      "name": "退出",
+      "font_class": "tuichu",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "14625191",
+      "name": "查看",
+      "font_class": "examine",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "798101",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "2579399",
+      "name": "修改",
+      "font_class": "xiugai",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "3304237",
+      "name": "上传 向上 箭头",
+      "font_class": "shangchuanxiangshangjiantou",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "8507448",
+      "name": "新增 2",
+      "font_class": "xinzeng",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "9229209",
+      "name": "账户",
+      "font_class": "zhanghu",
+      "unicode": "e7fb",
+      "unicode_decimal": 59387
+    },
+    {
+      "icon_id": "12303596",
+      "name": "问好",
+      "font_class": "wenhao",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "14382339",
+      "name": "账号",
+      "font_class": "zhanghao",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "515500",
+      "name": "内容",
+      "font_class": "neirong",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "6337507",
+      "name": "用户设置",
+      "font_class": "yonghushezhi",
+      "unicode": "e6e9",
+      "unicode_decimal": 59113
+    },
+    {
+      "icon_id": "6616874",
+      "name": "收缩",
+      "font_class": "shousuo",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "7895463",
+      "name": "统计分析",
+      "font_class": "tongjifenxi",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "12436512",
+      "name": "管理员",
+      "font_class": "guanliyuan",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "14875069",
+      "name": "文献服务",
+      "font_class": "wenxianfuwu",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    }
+  ]
+}

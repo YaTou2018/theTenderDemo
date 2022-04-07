@@ -1,0 +1,60 @@
+// base color
+$blue:#324157;
+$light-blue:#3A71A8;
+$red:#C03639;
+$pink: #E65D6E;
+$green: #30B08F;
+$tiffany: #4AB7BD;
+$yellow:#FEC171;
+$panGreen: #30B08F;
+
+// sidebar----first
+// $menuText:#FFFAFAFA;
+// $menuActiveText:rgba(66,81,136,1);
+// $subMenuActiveText:#f4f4f5;
+// $menuBg:#505d8f;
+// $menuHover:#374786;
+// $subMenuBg:#505d8f;
+// $subMenuHover:#374786;
+// $logoText:#505d8f;
+// $loginBtn:#505d8f;
+// $loginBtnHover:#374786;
+// $sideBarWidth: 200px;
+// $headerBg:url(../../../assets/image/topbg.jpg) center no-repeat;
+
+// sidebar----second
+$menuText:#FFFAFAFA;
+$menuActiveText:rgba(66,81,136,1);
+$subMenuActiveText:#f4f4f5;
+$menuBg:#374786;//背景色
+$menuHover:#2e3d7c;
+$subMenuBg:#374786;
+$subMenuHover:#2e3d7c;
+$logoText:#374786;
+$loginBtn:#374786;
+$loginBtnHover:#2a3d8a;
+$sideBarWidth: 180px;
+$headerBg:url(../../../assets/image/topbgnew.jpg) center no-repeat;
+
+
+
+// 字体
+$font:#606266; //常规文字颜色
+$fontTitle:#000; //标题文字颜色
+$fontSub:#909399; //次要文字颜色
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+  font:$font;
+  fontTitle:$fontTitle;
+  fontSub:$fontSub;
+}
