@@ -28,8 +28,17 @@ export function getZbIndex(data) {
 // 查询【投标文件指标】
 export function getTbIndex(data) {
   return request({
-    url: '/ztb/zb/getZbIndex',
+    url: '/ztb/zb/getTbIndex',
     method: 'get',
+    data: data
+  })
+}
+
+// 编辑
+export function editZb(data) {
+  return request({
+    url: '/ztb/zb',
+    method: 'put',
     data: data
   })
 }

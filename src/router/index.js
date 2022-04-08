@@ -8,7 +8,7 @@ const routes = [
   {
     path: '',
     component: Layout,
-    redirect: '/home',
+    redirect: '/bid',
     children: [
       {
         path: 'home',
@@ -17,7 +17,7 @@ const routes = [
         meta: { title: '首页', icon: 'dashboard', noCache: true, affix: true }
       },
       {
-        path: 'upload',
+        path: 'bid',
         component: () => import('../views/ztb/UploadFile.vue'),
         name: '首页',
         meta: { title: '首页', icon: '', noCache: true, affix: true }
