@@ -18,38 +18,40 @@
       </el-form-item>
     </el-form>
 
-    <el-table border v-loading="loading" :data="zbList" :span-method="objectSpanMethod">
-      <el-table-column label="序号" align="center" width="50">
-        <template slot-scope="scope">
-          <p>
-            {{ spanRowsArr.findIndex(item => item.indexArr.includes(scope.$index)) + 1 }}
-          </p>
-        </template>
-      </el-table-column>
-      <el-table-column label="指标" width="160" prop="zname" />
-      <el-table-column label="分值" prop="total" width="80" />
-      <el-table-column label="评分标准" prop="cname" />
-      <el-table-column label="页码" width="160" prop="pages">
-        <template slot-scope="scope">
-          <template v-for="(p, index) in formatPageNum(scope.row.pages)">
-            <el-button
-              :key="index"
-              type="text"
-              @click="handlePreviewPdfOfPage(scope.row.filename, p)">
-                {{ p }}
-            </el-button>
-            <span class="separator" v-if="index !== formatPageNum(scope.row.pages).length-1">||</span>
+    <div class="content">
+      <el-table border v-loading="loading" :data="zbList" :span-method="objectSpanMethod">
+        <el-table-column label="序号" align="center" width="50">
+          <template slot-scope="scope">
+            <p>
+              {{ spanRowsArr.findIndex(item => item.indexArr.includes(scope.$index)) + 1 }}
+            </p>
           </template>
-        </template>
-      </el-table-column>
-      <el-table-column label="符合情况的文本" prop="content">
-        <template slot-scope="scope">
-          <p style="padding:0;margin:0;" v-for="(t, index) in scope.row.keywords.split('/n')" :key="index">
-            {{ t }}
-          </p>
-        </template>
-      </el-table-column>
-    </el-table>
+        </el-table-column>
+        <el-table-column label="指标" width="160" prop="zname" />
+        <el-table-column label="分值" prop="total" width="80" />
+        <el-table-column label="评分标准" prop="cname" />
+        <el-table-column label="页码" width="160" prop="pages">
+          <template slot-scope="scope">
+            <template v-for="(p, index) in formatPageNum(scope.row.pages)">
+              <el-button
+                :key="index"
+                type="text"
+                @click="handlePreviewPdfOfPage(scope.row.filename, p)">
+                  {{ p }}
+              </el-button>
+              <span class="separator" :key="index+'span'" v-if="index !== formatPageNum(scope.row.pages).length-1">||</span>
+            </template>
+          </template>
+        </el-table-column>
+        <el-table-column label="符合情况的文本" prop="content">
+          <template slot-scope="scope">
+            <p style="padding:0;margin:0;" v-for="(t, index) in scope.row.keywords.split('/n')" :key="index">
+              {{ t }}
+            </p>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <el-drawer
       title="我是标题"
@@ -89,7 +91,7 @@ export default {
     };
   },
   created() {
-    this.getTbFile('中核武汉核电运行技术股份有限公司_投标文件');
+    // this.getTbFile('中核武汉核电运行技术股份有限公司_投标文件');
   },
   methods: {
     /** 查询【投标文件指标】 */
@@ -199,7 +201,10 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scope>
+  .content {
+    padding: 20px 0;
+  }
   .el-upload__tip {
     margin-left: 8px;
     color: #F56C6C;
