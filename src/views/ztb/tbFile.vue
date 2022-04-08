@@ -1,5 +1,5 @@
 <template>
-  <div class="ztb-container">
+  <div class="tb-container">
     <el-form :inline="true" label-width="126px">
       <el-form-item label="上传指标项目文件">
         <el-upload
@@ -19,7 +19,7 @@
     </el-form>
 
     <div class="content">
-      <el-table border v-loading="loading" :data="zbList" :span-method="objectSpanMethod">
+      <el-table border v-loading="loading" :data="tbList" :span-method="objectSpanMethod">
         <el-table-column label="序号" align="center" width="50">
           <template slot-scope="scope">
             <p>
@@ -79,7 +79,7 @@ export default {
       // 遮罩层
       loading: false,
       total: 0,
-      zbList: [],
+      tbList: [],
       spanRowsArr: [],
       uploadLoading: false,
       fileList: [],
@@ -90,16 +90,13 @@ export default {
       curPdfPage: 1,
     };
   },
-  created() {
-    // this.getTbFile('中核武汉核电运行技术股份有限公司_投标文件');
-  },
   methods: {
     /** 查询【投标文件指标】 */
-    getTbFile() {
+    getTbFile(filename) {
       this.loading = true;
-      getTbIndex()
+      getTbIndex({filename})
         .then(res => {
-          this.zbList = res.rows;
+          this.tbList = res.rows;
           var arr = [];// [{name: 'zh', num: 1, indexArr: [0, 1]}]
           var cuIndex = function(name) {
             return arr.findIndex(item => item.name === name)
@@ -120,7 +117,7 @@ export default {
           this.loading = false;
         })
         .catch(() =>  {
-          this.zbList = [];
+          this.tbList = [];
           this.total = 0;
           this.loading = false;
         });
@@ -168,9 +165,7 @@ export default {
       if (response.code !== 200) {
         this.$message.error(response.msg || '上传失败！');
       } else {
-        // this.zbList= response.data;
-        // console.log(this.zbList)
-        this.getTbFile();
+        this.getTbFile(file.name.slice(0, -4));
         this.$message({
           message: '上传成功！',
           type: 'success'

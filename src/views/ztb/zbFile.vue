@@ -1,5 +1,5 @@
 <template>
-  <div class="ztb-container">
+  <div class="zb-container">
     <el-form label-width="100px" class="upload-form">
       <el-form-item label="上传招标文件">
         <el-upload
@@ -23,10 +23,10 @@
         <span style="color: #909399;font-weight: 800;">招标项目：</span>
         <span>{{zbList.length > 0 ? zbList[0].zbProject : ''}}</span>
       </h3>
-      <el-table border v-loading="loading" :data="zbList">
+      <el-table border v-loading="loading" :data="zbList.slice(1)" height="500">
         <el-table-column label="序号" prop="zid" align="center" min-width="80"/>
-        <!-- <el-table-column label="序号" prop="zname" min-width="80"/> -->
-        <el-table-column label="评分因素" prop="zname" min-width="100"/>
+        <el-table-column :label="zbList.length > 0 ? zbList[0].zname : '评分因素'" prop="zname" min-width="80"/>
+        <!-- <el-table-column label="评分因素" prop="secondName" min-width="100"/> -->
         <el-table-column label="评分标准" prop="shirdName" min-width="160"/>
         <el-table-column label="分值" prop="score" min-width="80"></el-table-column>
         <el-table-column label="推荐目录" prop="catalogDesc" min-width="150"></el-table-column>
@@ -45,29 +45,29 @@
     <el-dialog title="编辑信息" :visible.sync="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="120px" ref="editForm" size="mini">
         <el-form-item label="序号" prop="zid">
-            <el-input v-model="editForm.zid" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="序号" prop="zname">
-            <el-input v-model="editForm.zname" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="评分因素" prop="secondName">
-            <el-input v-model="editForm.secondName" auto-complete="off" ></el-input>
-          </el-form-item>
-          <el-form-item label="评分标准" prop="shirdName" >
-            <el-input v-model="editForm.shirdName" auto-complete="off" ></el-input>
-          </el-form-item>
-          <el-form-item label="分值" prop="score">
-            <el-input v-model="editForm.score" auto-complete="off" ></el-input>
-          </el-form-item>
-          <el-form-item label="推荐目录" prop="catalogDesc" >
-            <el-input v-model="editForm.catalogDesc" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="推荐子目录" prop="rules">
-            <el-input v-model="editForm.rules" auto-complete="off" ></el-input>
-          </el-form-item>
-          <el-form-item label="推荐关键词" prop="keywords">
-            <el-input v-model="editForm.keywords" auto-complete="off" ></el-input>
-          </el-form-item>
+          <el-input v-model="editForm.zid" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="序号" prop="zname">
+          <el-input v-model="editForm.zname" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="评分因素" prop="secondName">
+          <el-input v-model="editForm.secondName" auto-complete="off" ></el-input>
+        </el-form-item>
+        <el-form-item label="评分标准" prop="shirdName" >
+          <el-input v-model="editForm.shirdName" auto-complete="off" ></el-input>
+        </el-form-item>
+        <el-form-item label="分值" prop="score">
+          <el-input v-model="editForm.score" auto-complete="off" ></el-input>
+        </el-form-item>
+        <el-form-item label="推荐目录" prop="catalogDesc" >
+          <el-input v-model="editForm.catalogDesc" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="推荐子目录" prop="rules">
+          <el-input v-model="editForm.rules" auto-complete="off" ></el-input>
+        </el-form-item>
+        <el-form-item label="推荐关键词" prop="keywords">
+          <el-input v-model="editForm.keywords" auto-complete="off" ></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button size="mini" type="primary" @click.native="editFormVisible = false">取消</el-button>
@@ -102,7 +102,7 @@ export default {
     };
   },
   created() {
-    // this.getZbFile("秦二厂低、中水平放射性固体废物钢桶等材料一批采购项目-招标文件发标版本(1).docx");
+    this.getZbFile("秦二厂低、中水平放射性固体废物钢桶等材料一批采购项目-招标文件发标版本(1).docx");
   },
   methods: {
     //编辑
@@ -136,11 +136,10 @@ export default {
     },
     /** 查询【招标文件指标】 */
     getZbFile(filename) {
-      console.log('------', filename)
       this.loading = true;
-      getZbIndex({filename: filename})
+      getZbIndex({filename})
         .then(res => {
-          this.zbList = res.rows.slice(1);
+          this.zbList = res.rows;
           this.loading = false;
         })
         .catch(() =>  {
@@ -183,6 +182,21 @@ export default {
       this.fileList = [];
       this.$refs.uploadEle.clearFiles();
       this.uploadLoading = false;
+    },
+    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0) {
+        if (rowIndex % 2 === 0) {
+          return {
+            rowspan: 2,
+            colspan: 1
+          };
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          };
+        }
+      }
     }
   }
 };

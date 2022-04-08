@@ -22,7 +22,7 @@ export function getZbIndex(data) {
   return request({
     url: '/ztb/zb/getZbIndex',
     method: 'get',
-    data: data
+    params: data
   })
 }
 // 查询【投标文件指标】
@@ -30,7 +30,7 @@ export function getTbIndex(data) {
   return request({
     url: '/ztb/zb/getTbIndex',
     method: 'get',
-    data: data
+    params: data
   })
 }
 

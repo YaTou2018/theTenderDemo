@@ -1,7 +1,7 @@
 <template>
-  <div class="ztb-container">
+  <div class="container">
     <div class="bg"></div>
-    <div class="formWrap">
+    <div class="cont-wrap">
       <el-tabs v-model="activeName" >
         <el-tab-pane label="招标" name="first">
           <zbFile />
@@ -35,19 +35,17 @@ export default {
 
 <style lang="less" scoped>
   .bg{
+    position: absolute;
+    left: 0;
+    top: 0;
     width:100%;
     height:140px;
     background:#d7ebff;
   }
-  .formWrap{
+  .cont-wrap{
     width:80%;
     padding-top:20px;
     padding-bottom:5px;
-  }
-  .formWrap{
-    margin:-140px auto 0;
-  }
-  .formWrap .el-form-item {
-    min-width: 360px;
+    margin: 0 auto;
   }
 </style>
