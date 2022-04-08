@@ -5,6 +5,7 @@
         <el-upload
           ref="uploadEle"
           :action="action"
+          :data="{project: '新型放射性废液膜处理技术及装置研发外委'}"
           :before-upload="handleBeforeUpload"
           :on-remove="handleRemove"
           :on-success="handleSuc"
@@ -19,7 +20,7 @@
     </el-form>
 
     <div class="content">
-      <el-table border v-loading="loading" :data="tbList" :span-method="objectSpanMethod">
+      <el-table border v-loading="uploadLoading" :data="tbList" :span-method="objectSpanMethod">
         <el-table-column label="序号" align="center" width="50">
           <template slot-scope="scope">
             <p>
@@ -36,7 +37,7 @@
               <el-button
                 :key="index"
                 type="text"
-                @click="handlePreviewPdfOfPage(scope.row.filename, p)">
+                @click="handlePreviewPdfOfPage(scope.row, p)">
                   {{ p }}
               </el-button>
               <span class="separator" :key="index+'span'" v-if="index !== formatPageNum(scope.row.pages).length-1">||</span>
@@ -59,14 +60,14 @@
       :with-header="false"
       size="50%">
       <div class="">
-        <preview-pdf :fileName="curFileName" :curPage="curPdfPage" />
+        <preview-pdf :fileName="curFileName" :filePath="curFilePath" :curPage="curPdfPage" />
       </div>
     </el-drawer>
   </div>
 </template>
 
 <script>
-import { getTbIndex } from "@/api/ztb/zb";
+// import { getTbIndex } from "@/api/ztb/zb";
 import PreviewPdf from '@/components/PreviewPdf'
 
 export default {
@@ -87,44 +88,46 @@ export default {
       uploadErrTip: '只能上传.pdf 文件',
       drawer: false,
       curFileName: '',
+      curFilePath: '',
       curPdfPage: 1,
     };
   },
   methods: {
     /** 查询【投标文件指标】 */
-    getTbFile(filename) {
-      this.loading = true;
-      getTbIndex({filename})
-        .then(res => {
-          this.tbList = res.rows;
-          var arr = [];// [{name: 'zh', num: 1, indexArr: [0, 1]}]
-          var cuIndex = function(name) {
-            return arr.findIndex(item => item.name === name)
-          }
-          res.rows.forEach((item, i) => {
-            var inNum = cuIndex(item.zname);
+    getTbFile(res) {
+      console.log(res)
+      var list = res && res.data || [];
+      this.tbList = list;
+      var arr = [];// [{name: 'zh', num: 1, indexArr: [0, 1]}]
+      var cuIndex = function(name) {
+        return arr.findIndex(item => item.name === name)
+      }
+      list.forEach((item, i) => {
+        var inNum = cuIndex(item.zname);
 
-            if (inNum > -1) {
-              arr[inNum].num+=1;
-              arr[inNum].indexArr.push(i)
-            } else {
-              arr.push({name: item.zname, num: 1, indexArr: [i]})
-            }
-          });
-          this.spanRowsArr = arr;
+        if (inNum > -1) {
+          arr[inNum].num+=1;
+          arr[inNum].indexArr.push(i)
+        } else {
+          arr.push({name: item.zname, num: 1, indexArr: [i]})
+        }
+      });
+      this.spanRowsArr = arr;
 
-          this.total = res.total;
-          this.loading = false;
-        })
-        .catch(() =>  {
-          this.tbList = [];
-          this.total = 0;
-          this.loading = false;
-        });
+      this.total = res.total;
+      this.loading = false;
+      // getTbIndex({filename})
+      //   .then(res => {
+          
+      //   })
+      //   .catch(() =>  {
+      //     this.tbList = [];
+      //     this.total = 0;
+      //     this.loading = false;
+      //   });
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       const arr = this.spanRowsArr;
-      const len = arr.length;
 
       const cuspan = function () {
         const obj = arr.find(item => item.indexArr.includes(rowIndex)) || {};
@@ -165,7 +168,7 @@ export default {
       if (response.code !== 200) {
         this.$message.error(response.msg || '上传失败！');
       } else {
-        this.getTbFile(file.name.slice(0, -4));
+        this.getTbFile(response);
         this.$message({
           message: '上传成功！',
           type: 'success'
@@ -182,10 +185,11 @@ export default {
       this.$refs.uploadEle.clearFiles();
       this.uploadLoading = false;
     },
-    handlePreviewPdfOfPage(filename, page) {
+    handlePreviewPdfOfPage(info, page) {
       this.curPdfPage = +page;
       this.drawer = true;
-      this.curFileName = filename;
+      this.curFileName = info.filename;
+      this.curFilePath = info.filepath
     },
     formatPageNum(pagesStr) {
       if (!pagesStr) return [];
