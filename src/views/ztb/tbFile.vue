@@ -1,11 +1,15 @@
 <template>
   <div class="tb-container">
-    <el-form :inline="true" label-width="126px">
-      <el-form-item label="上传指标项目文件">
+    <el-form :inline="true">
+      <el-form-item label="项目名称" label-width="72px" style="margin-right: 24px;">
+        <el-input v-model.trim="projectName" style="width: 320px;"></el-input>
+      </el-form-item>
+      <el-form-item label="上传指标项目文件" label-width="126px">
         <el-upload
           ref="uploadEle"
+          :disabled="isDisableUplod"
           :action="action"
-          :data="{project: '新型放射性废液膜处理技术及装置研发外委'}"
+          :data="{project: projectName}"
           :before-upload="handleBeforeUpload"
           :on-remove="handleRemove"
           :on-success="handleSuc"
@@ -13,7 +17,7 @@
           :limit="1"
           :file-list="fileList"
           accept=".pdf">
-          <el-button type="primary" icon="el-icon-upload" size="mini" :loading="uploadLoading">点击上传</el-button>
+          <el-button type="primary" icon="el-icon-upload" size="mini" :loading="uploadLoading" :disabled="isDisableUplod">点击上传</el-button>
           <span slot="tip" class="el-upload__tip">{{ uploadErrTip }}</span>
         </el-upload>
       </el-form-item>
@@ -60,7 +64,7 @@
       :with-header="false"
       size="50%">
       <div class="">
-        <preview-pdf :fileName="curFileName" :filePath="curFilePath" :curPage="curPdfPage" />
+        <preview-pdf :fileName="curFileName" :curPage="curPdfPage" />
       </div>
     </el-drawer>
   </div>
@@ -88,14 +92,18 @@ export default {
       uploadErrTip: '只能上传.pdf 文件',
       drawer: false,
       curFileName: '',
-      curFilePath: '',
       curPdfPage: 1,
+      projectName: ''//新型放射性废液膜处理技术及装置研发外委
     };
+  },
+  computed: {
+    isDisableUplod() {
+      return !this.projectName || this.uploadLoading;
+    }
   },
   methods: {
     /** 查询【投标文件指标】 */
     getTbFile(res) {
-      console.log(res)
       var list = res && res.data || [];
       this.tbList = list;
       var arr = [];// [{name: 'zh', num: 1, indexArr: [0, 1]}]
@@ -189,7 +197,6 @@ export default {
       this.curPdfPage = +page;
       this.drawer = true;
       this.curFileName = info.filename;
-      this.curFilePath = info.filepath
     },
     formatPageNum(pagesStr) {
       if (!pagesStr) return [];
