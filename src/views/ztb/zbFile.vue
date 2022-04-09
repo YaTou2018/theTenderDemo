@@ -21,73 +21,114 @@
     <div class="content">
       <h3 class="list-tile">
         <span style="color: #909399;font-weight: 800;">招标项目：</span>
-        <span>{{zbList.length > 0 ? zbList[0].zbProject : ''}}</span>
+        <span>{{zbList.length > 0 ? zbList[0].project : ''}}</span>
       </h3>
-      <el-table border v-loading="loading" :data="zbList.slice(1)" height="500">
-        <el-table-column label="序号" prop="zid" align="center" min-width="80"/>
-        <el-table-column :label="zbList.length > 0 ? zbList[0].zname : '评分因素'" prop="zname" min-width="80"/>
-        <!-- <el-table-column label="评分因素" prop="secondName" min-width="100"/> -->
-        <el-table-column label="评分标准" prop="shirdName" min-width="160"/>
-        <el-table-column label="分值" prop="score" min-width="80"></el-table-column>
-        <el-table-column label="推荐目录" prop="catalogDesc" min-width="150"></el-table-column>
-        <el-table-column label="推荐子目录" prop="rules" min-width="120"></el-table-column>
-        <el-table-column label="推荐关键词" prop="keywords" min-width="150"></el-table-column>
-        <el-table-column label="操作" width="80">
-          <template slot-scope="scope">
-            <el-button type="primary"
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <!-- s -->
+      <a-table :columns="columns" :data-source="zbList" rowKey="id" bordered :scroll="{ x: 1300 }">
+        <template
+          v-for="col in editColumnList"
+          :slot="col"
+          slot-scope="text, record">
+          <div :key="col">
+            <a-input
+              v-if="record.editable"
+              style="margin: -5px 0"
+              :value="text"
+              @change="e => handleChange(e.target.value, record.id, col)"
+            />
+            <template v-else>
+              {{ text }}
+            </template>
+          </div>
+        </template>
+        <template slot="operation" slot-scope="text, record">
+          <div class="editable-row-operations">
+            <span v-if="record.editable">
+              <a @click="() => save(record.id)">Save</a>
+              <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.id)">
+                <a style="margin-left: 8px;">Cancel</a>
+              </a-popconfirm>
+            </span>
+            <span v-else>
+              <a :disabled="editingKey !== ''" @click="() => edit(record.id)">Edit</a>
+            </span>
+          </div>
+        </template>
+      </a-table>
+      <!-- e -->
     </div>
     <!--编辑界面-->
-    <el-dialog title="编辑信息" :visible.sync="editFormVisible" :close-on-click-modal="false">
-      <el-form :model="editForm" label-width="120px" ref="editForm" size="mini">
-        <el-form-item label="序号" prop="zid">
-          <el-input v-model="editForm.zid" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="序号" prop="zname">
-          <el-input v-model="editForm.zname" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="评分因素" prop="secondName">
-          <el-input v-model="editForm.secondName" auto-complete="off" ></el-input>
-        </el-form-item>
-        <el-form-item label="评分标准" prop="shirdName" >
-          <el-input v-model="editForm.shirdName" auto-complete="off" ></el-input>
-        </el-form-item>
-        <el-form-item label="分值" prop="score">
-          <el-input v-model="editForm.score" auto-complete="off" ></el-input>
-        </el-form-item>
-        <el-form-item label="推荐目录" prop="catalogDesc" >
-          <el-input v-model="editForm.catalogDesc" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="推荐子目录" prop="rules">
-          <el-input v-model="editForm.rules" auto-complete="off" ></el-input>
-        </el-form-item>
-        <el-form-item label="推荐关键词" prop="keywords">
-          <el-input v-model="editForm.keywords" auto-complete="off" ></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="mini" type="primary" @click.native="editFormVisible = false">取消</el-button>
-        <el-button size="mini" type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
-      </div>
-    </el-dialog>
+    
   </div>
 </template>
 
 <script>
+import { Table, Input, Popconfirm } from 'ant-design-vue';
 import { getZbIndex ,editZb} from "@/api/ztb/zb";
 
 export default {
   name: "ZB",
+  components: {
+    ATable: Table,
+    AInput: Input,
+    APopconfirm: Popconfirm
+  },
   data() {
     return {
+      columns: [
+        {
+          title: '序号',
+          dataIndex: 'zid',
+          scopedSlots: { customRender: 'zid' },
+        },
+        {
+          title: '序号2',
+          dataIndex: 'zname',
+          scopedSlots: { customRender: 'zname' },
+        },
+        {
+          title: '评分因素',
+          dataIndex: 'secondName',
+          scopedSlots: { customRender: 'secondName' },
+        },
+        {
+          title: '评分标准',
+          dataIndex: 'shirdName',
+          scopedSlots: { customRender: 'shirdName' },
+        },
+        {
+          title: '分值',
+          dataIndex: 'score',
+          scopedSlots: { customRender: 'score' },
+        },
+        {
+          title: '推荐目录',
+          dataIndex: 'catalogDesc',
+          scopedSlots: { customRender: 'catalogDesc' },
+        },
+        {
+          title: '推荐子目录',
+          dataIndex: 'rules',
+          scopedSlots: { customRender: 'rules' },
+        },
+        {
+          title: '推荐关键词',
+          dataIndex: 'keywords',
+          scopedSlots: { customRender: 'keywords' },
+        },
+        {
+          title: 'operation',
+          dataIndex: 'operation',
+          scopedSlots: { customRender: 'operation' },
+          fixed: 'right',
+          width: 120,
+          align: 'center',
+        },
+      ],
+      cacheData: [],
+      editingKey: '',
       //编辑界面数据
       editForm: {},
-      editLoading: false,
-      editFormVisible: false, //编辑界面是否显示
       activeName: 'first',
       // 遮罩层
       loading: false,
@@ -95,68 +136,132 @@ export default {
       uploadLoading: false,
       fileList: [],
       action: process.env.VUE_APP_BASE_API + '/ztb/zb/uploadzbFile',
-      uploadErrTip: '只能上传.docx 文件',
+      uploadErrTip: '只能上传 .docx，.doc，.pdf 文件',
       drawer: false,
       curFileName: '',
       curPdfPage: 1,
+      spanRowsArr_zid: []
     };
+  },
+  computed: {
+    editColumnList() {
+      return this.columns.slice(0, -1).map(item => item.dataIndex)
+    }
   },
   created() {
     this.getZbFile("秦二厂低、中水平放射性固体废物钢桶等材料一批采购项目-招标文件发标版本(1).docx");
   },
   methods: {
-    //编辑
-    editSubmit: function() {
-      this.$confirm("确认提交吗？", "提示", {
-        type: "warning",
-        confirmButtonClass: "el-button--mini",
-        cancelButtonClass: "el-button--mini"
-        }).then(() => {
-            this.editLoading = true;
-            //NProgress.start();
-            let para = Object.assign({}, this.editForm);
-            editZb(para).then(res => {
-              this.editLoading = false;
-                this.$message({
-                  message: "提交成功",
-                  type: "success"
-                });
-                this.$refs["editForm"].resetFields();
-                this.editFormVisible = false;
-                this.getZbFile(res.data);
-
-            });
-          });
+    handleChange(value, id, column) {
+      const newData = [...this.zbList];
+      const target = newData.find(item => id === item.id);
+      if (target) {
+        target[column] = value;
+        this.zbList = newData;
+      }
     },
-    //显示编辑界面
-    handleEdit: function(index, row) {
-      this.editFormVisible = true;
-      this.editForm = Object.assign({}, row, { index: index });
-      console.log(this.editForm)
+    edit(id) {
+      const newData = [...this.zbList];
+      const target = newData.find(item => id === item.id);
+      this.editingKey = id;
+      if (target) {
+        target.editable = true;
+        this.zbList = newData;
+      }
+    },
+    save(id) {
+      const newData = [...this.zbList];
+      const newCacheData = [...this.cacheData];
+      const target = newData.find(item => id === item.id);
+      const targetCache = newCacheData.find(item => id === item.id);
+      
+      editZb(target).then(res => {
+        if (res.code === 200) {
+          if (target && targetCache) {
+            delete target.editable;
+            this.zbList = newData;
+            Object.assign(targetCache, target);
+            this.cacheData = newCacheData;
+          }
+          this.$message({
+            message: "提交成功",
+            type: "success"
+          });
+          this.editingKey = '';
+        } else {
+          this.$message({
+            message: "操作失败",
+            type: "warning"
+          });
+        }
+      });
+
+      this.editingKey = '';
+    },
+    cancel(id) {
+      const newData = [...this.zbList];
+      const target = newData.find(item => id === item.id);
+      this.editingKey = '';
+      if (target) {
+        Object.assign(target, this.cacheData.find(item => id === item.id));
+        delete target.editable;
+        this.zbList = newData;
+      }
     },
     /** 查询【招标文件指标】 */
     getZbFile(filename) {
       this.loading = true;
       getZbIndex({filename})
         .then(res => {
-          this.zbList = res.rows;
+          this.zbList = res.rows.map((item, i) => {
+            if (i === 0) {
+              item.keywords = item.keywords || '推荐关键词';
+              item.rules = item.rules || '推荐子目录';
+              item.catalogDesc = item.catalogDesc || '推荐目录';
+            }
+            return item;
+          });
+          this.cacheData = [...res.rows];
+          // -----查询重复的zid
+          var arr = [];// [{name: 'zh', num: 1, indexArr: [0, 1]}]
+          var cuIndex = function(val) {
+            return arr.findIndex(item => item.name === val);
+          }
+          res.rows.slice(1).forEach((item, i) => {
+            var inNum = cuIndex(item.zid);
+
+            if (inNum > -1) {
+              const len_ = arr[inNum].indexArr.length;
+              if ((i - 1) === arr[inNum].indexArr[len_ - 1]) {
+                arr[inNum].num+=1;
+                arr[inNum].indexArr.push(i)
+              }
+            } else {
+              arr.push({name: item.zid, num: 1, indexArr: [i]})
+            }
+          });
+          this.spanRowsArr_zid = arr;
+          console.log(arr)
+
           this.loading = false;
         })
         .catch(() =>  {
           this.zbList = [];
+          this.cacheData = [];
           this.loading = false;
         });
     },
     /** upload按钮操作 */
     handleBeforeUpload(file) {
       console.log(file)
-      // if (file.type !== "application/pdf") {
-      //   this.$message({
-      //     message: this.uploadErrTip,
-      //     type: 'warning'
-      //   });
-      //   return false;
-      // }
+      const fileTypeList = ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/pdf", "application/msword" ]
+      if (!fileTypeList.includes(file.type)) {
+        this.$message({
+          message: this.uploadErrTip,
+          type: 'warning'
+        });
+        return false;
+      }
       this.uploadLoading = true;
     },
     handleRemove() {
@@ -184,10 +289,19 @@ export default {
       this.uploadLoading = false;
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
-        if (rowIndex % 2 === 0) {
+      const arr = this.spanRowsArr_zid;
+
+      const cuspan = function () {
+        const obj = arr.find(item => item.indexArr.includes(rowIndex)) || {};
+        return obj;
+      }
+
+      const cuspanObj = cuspan();
+
+      if ([0].includes(columnIndex)) {
+        if (rowIndex === cuspanObj.indexArr[0]) {
           return {
-            rowspan: 2,
+            rowspan: cuspanObj.num,
             colspan: 1
           };
         } else {
@@ -197,6 +311,7 @@ export default {
           };
         }
       }
+      // return [1,1]
     }
   }
 };
@@ -213,9 +328,8 @@ export default {
     margin-left: 8px;
     color: #F56C6C;
   }
-  .separator {
-    margin: 0 6px;
-    color: #CCC;
+  .ant-table-thead {
+    display: none;
   }
   .el-tabs__nav-wrap::after{background-color: #badcff;}
 </style>
