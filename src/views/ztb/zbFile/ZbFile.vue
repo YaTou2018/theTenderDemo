@@ -22,9 +22,13 @@
       <h3 class="list-tile">
         <span style="color: #909399;font-weight: 800;">招标项目：</span>
         <span>{{zbList.length > 0 ? zbList[0].project : ''}}</span>
+        <div class="float: right;">
+          <el-button type="primary" :class="{opacity03: !isView}" icon="el-icon-view" size="mini" @click="isView = true">预览</el-button>
+          <el-button type="warning" :class="{opacity03: isView}" icon="el-icon-edit" size="mini" @click="isView = false">编辑</el-button>
+        </div>
       </h3>
       <!-- s -->
-      <a-table :columns="columns" :data-source="zbList" rowKey="id" bordered :scroll="{ x: 1300 }">
+      <a-table v-show="!isView" :columns="columns" :data-source="zbList" rowKey="id" bordered :scroll="{ x: 1300 }">
         <template
           v-for="col in editColumnList"
           :slot="col"
@@ -56,6 +60,7 @@
         </template>
       </a-table>
       <!-- e -->
+      <ZbViewTable v-show="isView" :zbList="zbList" />
     </div>
     <!--编辑界面-->
     
@@ -65,13 +70,15 @@
 <script>
 import { Table, Input, Popconfirm } from 'ant-design-vue';
 import { getZbIndex ,editZb} from "@/api/ztb/zb";
+import ZbViewTable from "./ZbFilePreview"
 
 export default {
   name: "ZB",
   components: {
     ATable: Table,
     AInput: Input,
-    APopconfirm: Popconfirm
+    APopconfirm: Popconfirm,
+    ZbViewTable
   },
   data() {
     return {
@@ -137,10 +144,7 @@ export default {
       fileList: [],
       action: process.env.VUE_APP_BASE_API + '/ztb/zb/uploadzbFile',
       uploadErrTip: '只能上传 .docx，.doc，.pdf 文件',
-      drawer: false,
-      curFileName: '',
-      curPdfPage: 1,
-      spanRowsArr_zid: []
+      isView: true,
     };
   },
   computed: {
@@ -222,27 +226,7 @@ export default {
             return item;
           });
           this.cacheData = [...res.rows];
-          // -----查询重复的zid
-          var arr = [];// [{name: 'zh', num: 1, indexArr: [0, 1]}]
-          var cuIndex = function(val) {
-            return arr.findIndex(item => item.name === val);
-          }
-          res.rows.slice(1).forEach((item, i) => {
-            var inNum = cuIndex(item.zid);
-
-            if (inNum > -1) {
-              const len_ = arr[inNum].indexArr.length;
-              if ((i - 1) === arr[inNum].indexArr[len_ - 1]) {
-                arr[inNum].num+=1;
-                arr[inNum].indexArr.push(i)
-              }
-            } else {
-              arr.push({name: item.zid, num: 1, indexArr: [i]})
-            }
-          });
-          this.spanRowsArr_zid = arr;
-          console.log(arr)
-
+          
           this.loading = false;
         })
         .catch(() =>  {
@@ -288,31 +272,6 @@ export default {
       this.$refs.uploadEle.clearFiles();
       this.uploadLoading = false;
     },
-    objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-      const arr = this.spanRowsArr_zid;
-
-      const cuspan = function () {
-        const obj = arr.find(item => item.indexArr.includes(rowIndex)) || {};
-        return obj;
-      }
-
-      const cuspanObj = cuspan();
-
-      if ([0].includes(columnIndex)) {
-        if (rowIndex === cuspanObj.indexArr[0]) {
-          return {
-            rowspan: cuspanObj.num,
-            colspan: 1
-          };
-        } else {
-          return {
-            rowspan: 0,
-            colspan: 0
-          };
-        }
-      }
-      // return [1,1]
-    }
   }
 };
 </script>
@@ -332,4 +291,7 @@ export default {
     display: none;
   }
   .el-tabs__nav-wrap::after{background-color: #badcff;}
+  .opacity03 {
+    opacity: 0.3;
+  }
 </style>

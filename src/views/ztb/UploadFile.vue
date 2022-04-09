@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import zbFile from './zbFile'
+import zbFile from './zbFile/ZbFile'
 import tbFile from './tbFile'
 
 export default {
