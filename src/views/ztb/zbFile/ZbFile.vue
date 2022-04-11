@@ -157,7 +157,7 @@ export default {
     }
   },
   created() {
-    this.getZbFile("秦山地区乏燃料干法贮存项目实物保护系统设备（第二次）招标文件(1).docx");
+    // this.getZbFile("秦山地区乏燃料干法贮存项目实物保护系统设备（第二次）招标文件(1).docx");
   },
   methods: {
     handleChange(value, id, column) {
