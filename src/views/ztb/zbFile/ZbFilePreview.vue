@@ -1,5 +1,5 @@
 <template>
-  <el-table border :data="zbList" :span-method="objectSpanMethod">
+  <el-table border :data="zbList" :span-method="objectSpanMethod" class="zbViewTable">
     <el-table-column label="序号" prop="zid" align="center" min-width="80"/>
     <el-table-column :label="zbList.length > 0 ? zbList[0].zname : '评分因素'" prop="zname" min-width="80"/>
     <el-table-column label="评分因素" prop="secondName" min-width="100"/>
@@ -76,12 +76,12 @@ export default {
   methods: {
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       const spanRowsArrZid = this.spanRowsArrZid;
-      const cuspan = function () {
+      const cuspan_zid = function () {
         const obj = spanRowsArrZid.find(item => item.indexArr.includes(rowIndex));
         return obj;
       }
-      const cuspanObj = cuspan();
-      // 
+      const cuspanObj_zid = cuspan_zid();
+      // -----
       const spanRowsArrZname = this.spanRowsArrZname
       const cuspan_zname = function () {
         const obj = spanRowsArrZname.find(item => item.indexArr.includes(rowIndex));
@@ -89,10 +89,10 @@ export default {
       }
       const cuspanObj_zname = cuspan_zname();
 
-      if (columnIndex === 0 && cuspanObj) {
-        if (rowIndex === cuspanObj.indexArr[0]) {
+      if (columnIndex === 0 && cuspanObj_zid) {
+        if (rowIndex === cuspanObj_zid.indexArr[0]) {
           return {
-            rowspan: cuspanObj.num,
+            rowspan: cuspanObj_zid.num,
             colspan: 1
           };
         } else {
@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style lang="less" scope>
-  .el-table__header-wrapper {
+  .zbViewTable .el-table__header-wrapper {
     display: none;
   }
 </style>
