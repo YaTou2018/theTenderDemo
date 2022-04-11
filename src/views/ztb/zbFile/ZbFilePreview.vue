@@ -2,9 +2,9 @@
   <el-table border :data="zbList" :span-method="objectSpanMethod" class="zbViewTable">
     <el-table-column label="序号" prop="zid" align="center" min-width="80"/>
     <el-table-column :label="zbList.length > 0 ? zbList[0].zname : '评分因素'" prop="zname" min-width="80"/>
-    <el-table-column label="评分因素" prop="secondName" min-width="100"/>
+    <!-- <el-table-column label="评分因素" prop="secondName" min-width="100"/> -->
     <el-table-column label="评分标准" prop="shirdName" min-width="160"/>
-    <el-table-column label="分值" prop="score" min-width="80"></el-table-column>
+    <el-table-column label="分值" prop="score" width="80"></el-table-column>
     <el-table-column label="推荐目录" prop="catalogDesc" min-width="150"></el-table-column>
     <el-table-column label="推荐子目录" prop="rules" min-width="120"></el-table-column>
     <el-table-column label="推荐关键词" prop="keywords" min-width="150"></el-table-column>

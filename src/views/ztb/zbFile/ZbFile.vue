@@ -22,7 +22,7 @@
       <h3 class="list-tile">
         <span style="color: #909399;font-weight: 800;">招标项目：</span>
         <span>{{zbList.length > 0 ? zbList[0].project : ''}}</span>
-        <div class="float: right;">
+        <div class="">
           <el-button type="primary" :class="{opacity03: !isView}" icon="el-icon-view" size="mini" @click="isView = true">预览</el-button>
           <el-button type="warning" :class="{opacity03: isView}" icon="el-icon-edit" size="mini" @click="isView = false">编辑</el-button>
         </div>
@@ -48,13 +48,14 @@
         <template slot="operation" slot-scope="text, record">
           <div class="editable-row-operations">
             <span v-if="record.editable">
-              <a @click="() => save(record.id)">Save</a>
-              <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.id)">
-                <a style="margin-left: 8px;">Cancel</a>
-              </a-popconfirm>
+              <a @click="() => save(record.id)">保存</a>
+              <!-- <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.id)">
+                <a style="margin-left: 8px;" @click="() => cancel(record.id)">Cancel</a>
+              </a-popconfirm> -->
+              <a style="margin-left: 8px;" @click="() => cancel(record.id)">取消</a>
             </span>
             <span v-else>
-              <a :disabled="editingKey !== ''" @click="() => edit(record.id)">Edit</a>
+              <a :disabled="editingKey !== ''" @click="() => edit(record.id)">编辑</a>
             </span>
           </div>
         </template>
@@ -87,17 +88,19 @@ export default {
           title: '序号',
           dataIndex: 'zid',
           scopedSlots: { customRender: 'zid' },
+          width: 80
         },
         {
           title: '序号2',
           dataIndex: 'zname',
           scopedSlots: { customRender: 'zname' },
+          width: 100
         },
-        {
-          title: '评分因素',
-          dataIndex: 'secondName',
-          scopedSlots: { customRender: 'secondName' },
-        },
+        // {
+        //   title: '评分因素',
+        //   dataIndex: 'secondName',
+        //   scopedSlots: { customRender: 'secondName' },
+        // },
         {
           title: '评分标准',
           dataIndex: 'shirdName',
@@ -107,19 +110,20 @@ export default {
           title: '分值',
           dataIndex: 'score',
           scopedSlots: { customRender: 'score' },
+          width: 80,
         },
         {
-          title: '推荐目录',
+          title: '索引目录',
           dataIndex: 'catalogDesc',
           scopedSlots: { customRender: 'catalogDesc' },
         },
         {
-          title: '推荐子目录',
+          title: '索引子目录',
           dataIndex: 'rules',
           scopedSlots: { customRender: 'rules' },
         },
         {
-          title: '推荐关键词',
+          title: '关键词',
           dataIndex: 'keywords',
           scopedSlots: { customRender: 'keywords' },
         },
@@ -153,7 +157,7 @@ export default {
     }
   },
   created() {
-    this.getZbFile("秦二厂低、中水平放射性固体废物钢桶等材料一批采购项目-招标文件发标版本(1).docx");
+    this.getZbFile("秦山地区乏燃料干法贮存项目实物保护系统设备（第二次）招标文件(1).docx");
   },
   methods: {
     handleChange(value, id, column) {
@@ -219,13 +223,13 @@ export default {
         .then(res => {
           this.zbList = res.rows.map((item, i) => {
             if (i === 0) {
-              item.keywords = item.keywords || '推荐关键词';
-              item.rules = item.rules || '推荐子目录';
-              item.catalogDesc = item.catalogDesc || '推荐目录';
+              item.keywords = item.keywords || '关键词';
+              item.rules = item.rules || '索引子目录';
+              item.catalogDesc = item.catalogDesc || '索引目录';
             }
             return item;
           });
-          this.cacheData = [...res.rows];
+          this.cacheData = res.rows.map(item => ({ ...item }));
           
           this.loading = false;
         })
